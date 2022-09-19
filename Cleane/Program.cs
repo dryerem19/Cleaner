@@ -58,16 +58,14 @@ namespace Cleane
         {
             if (Directory.Exists(folderPath))
             {
+                RemoveAllFiles(folderPath);
                 foreach (string dirPath in Directory.GetDirectories(folderPath))
                 {
                     DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
                     if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
                         continue;
-
-                    RemoveAllFiles(dirPath);
                     IterateFolder(dirPath);
                 }
-                RemoveAllFiles(folderPath);
             }
         }
     }
