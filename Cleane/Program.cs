@@ -95,7 +95,8 @@ namespace Cleane
 
             if (!isRootDir)
             {
-                baseDir.Delete();
+                if (baseDir.EnumerateFiles().Count() == 0)
+                    baseDir.Delete();
                 Console.WriteLine($"Delete: {baseDir.FullName}");
             }
         }
