@@ -89,7 +89,7 @@ namespace Cleane
             {
                 if (ex is UnauthorizedAccessException || ex is IOException)
                 {
-
+                    return;
                 }
             }
         }
