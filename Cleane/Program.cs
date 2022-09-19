@@ -58,7 +58,7 @@ namespace Cleane
                             }
                             catch(System.UnauthorizedAccessException)
                             {
-                                Console.WriteLine($"Доступ запрещён:");
+                                Console.WriteLine($"Доступ запрещён: {filePath}");
                             }
 
                         }
