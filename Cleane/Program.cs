@@ -56,6 +56,8 @@ namespace Cleane
                     }
                 }
             }
+            Directory.Delete(dirPath);
+            Console.WriteLine($"Directory deleted: {dirPath}");
         }
 
         static void IterateFolder(string folderPath)
