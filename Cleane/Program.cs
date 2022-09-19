@@ -44,9 +44,13 @@ namespace Cleane
                             File.Delete(filePath);
                             Console.WriteLine($"File deleted: {filePath}");
                         }
-                        catch (UnauthorizedAccessException ex)
+                        catch (Exception ex)
                         {
-                            Console.WriteLine($"Доступ запрещён: {filePath}");
+                            if (ex is UnauthorizedAccessException || ex is IOException)
+                            {
+                                Console.WriteLine($"Доступ запрещён: {filePath}");
+                                return;
+                            }
                         }
 
                     }
