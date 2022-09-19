@@ -13,8 +13,15 @@ namespace Cleane
         {
             ClearDesktop();
 
-            IterateFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-            Console.ReadLine();
+            try
+            {
+                IterateFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+                Console.ReadLine();
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                Console.WriteLine($"Доступ запрещён:");
+            }
         }
 
         static void ClearDesktop()
