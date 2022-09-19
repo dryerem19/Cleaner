@@ -83,6 +83,7 @@ namespace Cleane
             try
             {
                 baseDir.Delete(true);
+                Console.WriteLine($"Delete: {baseDir.FullName}");
             }
             catch (Exception ex)
             {
