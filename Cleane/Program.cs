@@ -56,8 +56,18 @@ namespace Cleane
                     }
                 }
             }
-            Directory.Delete(dirPath);
-            Console.WriteLine($"Directory deleted: {dirPath}");
+            try
+            {
+                Directory.Delete(dirPath);
+                Console.WriteLine($"Directory deleted: {dirPath}");
+            }
+            catch (Exception ex)
+            {
+                if (ex is UnauthorizedAccessException || ex is IOException)
+                {
+
+                }
+            }
         }
 
         static void IterateFolder(string folderPath)
