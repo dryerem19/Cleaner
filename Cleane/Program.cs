@@ -19,59 +19,6 @@ namespace Cleane
             Console.ReadLine();
         }
 
-        //static void ClearDesktop()
-        //{
-        //    string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        //    foreach (string path in Directory.GetFiles(desktopPath))
-        //    {
-        //        string ext = Path.GetExtension(path);
-        //        if (ext != ".lnk")
-        //        {
-        //            File.Delete(path);
-        //        }
-        //    }
-        //}
-
-        //static void RemoveAllFiles(string dirPath)
-        //{
-        //    foreach (string filePath in Directory.GetFiles(dirPath))
-        //    {
-        //        string ext = Path.GetExtension(filePath);
-        //        if (ext != ".lnk")
-        //        {
-        //            if (Path.GetFileName(filePath)[0] != '.')
-        //            {
-        //                try
-        //                {
-        //                    File.Delete(filePath);
-        //                    Console.WriteLine($"File deleted: {filePath}");
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    if (ex is UnauthorizedAccessException || ex is IOException)
-        //                    {
-        //                        Console.WriteLine($"Доступ запрещён: {filePath}");
-        //                        return;
-        //                    }
-        //                }
-
-        //            }
-        //        }
-        //    }
-        //    try
-        //    {
-        //        Directory.Delete(dirPath);
-        //        Console.WriteLine($"Directory deleted: {dirPath}");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (ex is UnauthorizedAccessException || ex is IOException)
-        //        {
-
-        //        }
-        //    }
-        //}
-
         static void RecursiveDelete(DirectoryInfo baseDir, bool isRootDir)
         {
             if (!baseDir.Exists)
@@ -80,8 +27,7 @@ namespace Cleane
             foreach(var dir in baseDir.EnumerateDirectories())
             {
                 if (!dir.Attributes.HasFlag(FileAttributes.Hidden)
-                    && !dir.Attributes.HasFlag(FileAttributes.System)
-                    && !dir.Attributes.HasFlag(FileAttributes.ReadOnly))
+                    && !dir.Attributes.HasFlag(FileAttributes.System))
                 {
                     RecursiveDelete(dir, false);
                 }
@@ -89,31 +35,33 @@ namespace Cleane
 
             foreach(var file in baseDir.GetFiles())
             {
-                file.Delete();
-                Console.WriteLine($"Delete: {file.FullName}");
+                bool isReadOnly = file.IsReadOnly;
+                try
+                {
+                    file.IsReadOnly = false;
+                    file.Delete();
+                    Console.WriteLine($"[INFO MESSAGE] - File sucessfully deleted: {file.FullName}");
+                }
+                catch (Exception ex)
+                {
+                    if (isReadOnly == true && file.IsReadOnly == false)
+                        file.IsReadOnly = true;
+                    Console.WriteLine($"[ERROR MESSAGE] - {ex.Message}");
+                }
             }
 
             if (!isRootDir)
             {
-                if (baseDir.EnumerateFiles().Count() == 0)
+                try
+                {
                     baseDir.Delete();
-                Console.WriteLine($"Delete: {baseDir.FullName}");
+                    Console.WriteLine($"[INFO MESSAGE] - Directory deleted: {baseDir.FullName}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ERROR MESSAGE] - {ex.Message}");
+                }
             }
         }
-
-        //static void IterateFolder(string folderPath)
-        //{
-        //    if (Directory.Exists(folderPath))
-        //    {
-        //        RemoveAllFiles(folderPath);
-        //        foreach (string dirPath in Directory.GetDirectories(folderPath))
-        //        {
-        //            DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-        //            if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
-        //                continue;
-        //            IterateFolder(dirPath);
-        //        }
-        //    }
-        //}
     }
 }
