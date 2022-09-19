@@ -79,8 +79,7 @@ namespace Cleane
 
             foreach(var dir in baseDir.EnumerateDirectories())
             {
-                if (dir.Name[0] != '.' && !dir.Attributes.HasFlag(FileAttributes.Hidden))
-                    RecursiveDelete(baseDir, false);
+                RecursiveDelete(baseDir, false);
             }
 
             foreach(var file in baseDir.GetFiles())
