@@ -30,6 +30,30 @@ namespace Cleane
             }
         }
 
+        static void RemoveAllFiles(string dirPath)
+        {
+            foreach (string filePath in Directory.GetFiles(dirPath))
+            {
+                string ext = Path.GetExtension(filePath);
+                if (ext != ".lnk")
+                {
+                    if (Path.GetFileName(filePath)[0] != '.')
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                            Console.WriteLine($"File deleted: {filePath}");
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            Console.WriteLine($"Доступ запрещён: {filePath}");
+                        }
+
+                    }
+                }
+            }
+        }
+
         static void IterateFolder(string folderPath)
         {
             if (Directory.Exists(folderPath))
@@ -40,29 +64,10 @@ namespace Cleane
                     if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
                         continue;
 
-                    foreach (string filePath in Directory.GetFiles(dirPath))
-                    {
-                        string ext = Path.GetExtension(filePath);
-                        if (ext != ".lnk")
-                        {
-                            if (Path.GetFileName(filePath)[0] != '.')
-                            {
-                                try
-                                {
-                                    File.Delete(filePath);
-                                    Console.WriteLine($"File deleted: {filePath}");
-                                }
-                                catch (System.UnauthorizedAccessException)
-                                {
-                                    Console.WriteLine($"Доступ запрещён: {filePath}");
-                                }
-                                 
-                            }
-                        }
-                    }
-
+                    RemoveAllFiles(dirPath);
                     IterateFolder(dirPath);
                 }
+                RemoveAllFiles(folderPath);
             }
         }
     }
