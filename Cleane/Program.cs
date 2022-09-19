@@ -79,8 +79,7 @@ namespace Cleane
 
             foreach(var dir in baseDir.EnumerateDirectories())
             {
-                if (dir.Name[0] != '.' 
-                    && !dir.Attributes.HasFlag(FileAttributes.Hidden)
+                if (!dir.Attributes.HasFlag(FileAttributes.Hidden)
                     && !dir.Attributes.HasFlag(FileAttributes.System)
                     && !dir.Attributes.HasFlag(FileAttributes.ReadOnly))
                 {
