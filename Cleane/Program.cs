@@ -43,26 +43,27 @@ namespace Cleane
             {
                 foreach (string dirPath in Directory.GetDirectories(folderPath))
                 {
-                    try
+                    DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+                    if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
+                        continue;
+
+                    foreach (string filePath in Directory.GetFiles(dirPath))
                     {
-                        Console.WriteLine(dirPath);
-                        IterateFolder(dirPath);
-                    }
-                    catch (System.UnauthorizedAccessException)
-                    {
-                        Console.WriteLine($"Доступ запрещён: {dirPath}");
+                        string ext = Path.GetExtension(filePath);
+                        if (ext != ".lnk")
+                        {
+                            try
+                            {
+                                File.Delete(filePath);
+                            }
+                            catch(System.UnauthorizedAccessException)
+                            {
+                                Console.WriteLine($"Доступ запрещён:");
+                            }
+                        }
                     }
 
-                    //DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-                    //if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
-                    //    continue;
-
-                    //foreach (string filePath in Directory.GetFiles(dirPath))
-                    //{
-                    //    string ext = Path.GetExtension(filePath);
-                    //    if (ext != ".lnk")
-                    //        File.Delete(filePath);
-                    //}
+                    IterateFolder(dirPath);
                 }
             }
         }
