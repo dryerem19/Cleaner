@@ -13,15 +13,8 @@ namespace Cleane
         {
             //ClearDesktop();
 
-            try
-            {
-                IterateFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-                Console.ReadLine();
-            }
-            catch (System.UnauthorizedAccessException)
-            {
-                Console.WriteLine($"Доступ запрещён:");
-            }
+            IterateFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            Console.ReadLine();
         }
 
         static void ClearDesktop()
@@ -52,19 +45,19 @@ namespace Cleane
                         string ext = Path.GetExtension(filePath);
                         if (ext != ".lnk")
                         {
-                            try
+                            if (Path.GetFileName(filePath)[0] != '.')
                             {
-                                if (Path.GetFileName(filePath)[0] != '.')
+                                try
                                 {
                                     File.Delete(filePath);
                                     Console.WriteLine($"File deleted: {filePath}");
                                 }
+                                catch (System.UnauthorizedAccessException)
+                                {
+                                    Console.WriteLine($"Доступ запрещён: {filePath}");
+                                }
+                                 
                             }
-                            catch(System.UnauthorizedAccessException)
-                            {
-                                Console.WriteLine($"Доступ запрещён: {filePath}");
-                            }
-
                         }
                     }
 
