@@ -11,7 +11,7 @@ namespace Cleane
     {
         static void Main(string[] args)
         {
-            ClearDesktop();
+            //ClearDesktop();
 
             try
             {
