@@ -13,7 +13,7 @@ namespace Cleane
         {
             //ClearDesktop();
 
-            RecursiveDelete(new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)));
+            RecursiveDelete(new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)), true);
 
             //IterateFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
             Console.ReadLine();
@@ -72,7 +72,7 @@ namespace Cleane
         //    }
         //}
 
-        static void RecursiveDelete(DirectoryInfo baseDir)
+        static void RecursiveDelete(DirectoryInfo baseDir, bool isRootDir)
         {
             if (!baseDir.Exists)
                 return;
@@ -80,22 +80,20 @@ namespace Cleane
             foreach(var dir in baseDir.EnumerateDirectories())
             {
                 if (dir.Name[0] != '.' && !dir.Attributes.HasFlag(FileAttributes.Hidden))
-                    RecursiveDelete(baseDir);
+                    RecursiveDelete(baseDir, false);
             }
-            baseDir.Delete(true);
-            Console.WriteLine($"Delete: {baseDir.FullName}");
-            //try
-            //{
-            //    baseDir.Delete(true);
-            //    Console.WriteLine($"Delete: {baseDir.FullName}");
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (ex is UnauthorizedAccessException || ex is IOException)
-            //    {
-            //        return;
-            //    }
-            //}
+
+            foreach(var file in baseDir.GetFiles())
+            {
+                file.Delete();
+                Console.WriteLine($"Delete: {file.FullName}");
+            }
+
+            if (!isRootDir)
+            {
+                baseDir.Delete();
+                Console.WriteLine($"Delete: {baseDir.FullName}");
+            }
         }
 
         //static void IterateFolder(string folderPath)
