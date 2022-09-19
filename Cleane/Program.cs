@@ -54,7 +54,11 @@ namespace Cleane
                         {
                             try
                             {
-                                File.Delete(filePath);
+                                if (Path.GetFileName(filePath)[0] != '.')
+                                {
+                                    File.Delete(filePath);
+                                    Console.WriteLine($"File deleted: {filePath}");
+                                }
                             }
                             catch(System.UnauthorizedAccessException)
                             {
