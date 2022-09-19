@@ -74,24 +74,28 @@ namespace Cleane
 
         static void RecursiveDelete(DirectoryInfo baseDir)
         {
+            if (!baseDir.Exists)
+                return;
+
             foreach(var dir in baseDir.EnumerateDirectories())
             {
-                if (dir.Name[0] == '.' || dir.Attributes.HasFlag(FileAttributes.Hidden))
-                    continue;
-                RecursiveDelete(baseDir);
+                if (dir.Name[0] != '.' && !dir.Attributes.HasFlag(FileAttributes.Hidden))
+                    RecursiveDelete(baseDir);
             }
-            try
-            {
-                baseDir.Delete(true);
-                Console.WriteLine($"Delete: {baseDir.FullName}");
-            }
-            catch (Exception ex)
-            {
-                if (ex is UnauthorizedAccessException || ex is IOException)
-                {
-                    return;
-                }
-            }
+            baseDir.Delete(true);
+            Console.WriteLine($"Delete: {baseDir.FullName}");
+            //try
+            //{
+            //    baseDir.Delete(true);
+            //    Console.WriteLine($"Delete: {baseDir.FullName}");
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex is UnauthorizedAccessException || ex is IOException)
+            //    {
+            //        return;
+            //    }
+            //}
         }
 
         //static void IterateFolder(string folderPath)
