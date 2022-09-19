@@ -36,17 +36,18 @@ namespace Cleane
             {
                 foreach (string dirPath in Directory.GetDirectories(folderPath))
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
-                    if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
-                        continue;
+                    //DirectoryInfo dirInfo = new DirectoryInfo(dirPath);
+                    //if (dirInfo.Name[0] == '.' || dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
+                    //    continue;
 
-                    foreach (string filePath in Directory.GetFiles(dirPath))
-                    {
-                        string ext = Path.GetExtension(filePath);
-                        if (ext != ".lnk")
-                            File.Delete(filePath);
-                    }
+                    //foreach (string filePath in Directory.GetFiles(dirPath))
+                    //{
+                    //    string ext = Path.GetExtension(filePath);
+                    //    if (ext != ".lnk")
+                    //        File.Delete(filePath);
+                    //}
 
+                    Console.WriteLine(dirPath);
                     IterateFolder(dirPath);
                 }
             }
